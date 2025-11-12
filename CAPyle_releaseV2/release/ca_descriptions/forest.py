@@ -121,10 +121,37 @@ def transition_func(grid, neighbourstates, neighbourcounts):
     
     ### Burning chaparral rules: Medium chance to burn out to become burned chaparral, else survives
     
+    # if burning chaparral, survive (burnout handled next so that survive is default)
+    burning_chaparral_survive = (grid == 9)
+    
+    # if burning chaparral, 40% chance to burn out
+    random_values = np.random.rand(*grid.shape)
+    burning_chaparral_burnout = (random_values < 0.4) & (grid == 9)
+    
+    ### Burned dense forest rules: survives
+    
+    # if burned dense forest, survives
+    burned_dense_forest_survive = (grid == 10)
+    
+    ### Burned canyon rules: survives
+    
+    # if burned canyon, survives
+    burned_canyon_survive = (grid == 11)
+    
+    ### Burned chaparral rules: survives
+    
+    # if burned chaparral, survives
+    burned_chaparral_survive = (grid == 12)
+    
+    ### Burned town rules: survives
+    
+    # if burned town, survives
+    burned_town_survive = (grid == 13)
+    
     ######################################################################################
     
     
-    # Set all cells to 0 (dead)
+    # Set all cells to 0 as fallback
     grid[:, :] = 0
     
     ### Town rules: Burns if at least one burning neighbour, else survives
@@ -193,8 +220,33 @@ def transition_func(grid, neighbourstates, neighbourcounts):
     # Set cells to 11 where burning canyon burns out
     grid[burning_canyon_burnout] = 11
     
+    ### Burning chaparral rules: Medium chance to burn out to become burned chaparral, else survives
     
+    # Set cells to 9 where burning chaparral survives
+    grid[burning_chaparral_survive] = 9
+    
+    # Set cells to 12 where burning chaparral burns out
+    grid[burning_chaparral_burnout] = 12
+    
+    ### Burned dense forest rules: survives
+    
+    # Set cells to 10 where burned dense forest survives
+    grid[burned_dense_forest_survive] = 10
 
+    ### Burned canyon rules: survives
+    
+    # Set cells to 11 where burned canyon survives
+    grid[burned_canyon_survive] = 11
+    
+    ### Burned chaparral rules: survives
+    
+    # Set cells to 12 where burned chaparral survives
+    grid[burned_chaparral_survive] = 12
+    
+    ### Burned town rules: survives
+    
+    # Set cells to 13 where burned town survives
+    grid[burned_town_survive] = 13
     
     return grid
 
