@@ -39,15 +39,16 @@ def transition_func(grid, neighbourstates, neighbourcounts, wind_direction = 0):
     # Burned chaparral - 0.75,0.75,0.75
     # Burned town - 1,0,0
 
+    # properly unpack states
+    town, water, dense_forest, canyon, chaparral, powerplant, incinerator, burning_dense_forest, burning_canyon, burning_chaparral, burned_dense_forest, burned_canyon, burned_chaparral, burned_town = neighbourcounts
 
     # unpack state counts for clarity
-    alive_neighbours, burning_neighbours, burned_neighbours= neighbourcounts
-    alive_neighbours = (neighbourstates[2] + neighbourstates[3] + neighbourstates[4] )
+    #alive_neighbours, burning_neighbours, burned_neighbours= neighbourcounts
+    alive_neighbours = town + water + dense_forest + canyon + chaparral
     
     # Powerplant and Incinerator considered burning neighbours for purposes of igniting surroundings
-    burning_neighbours = (neighbourstates[5] + neighbourstates[6] + neighbourstates[7] + neighbourstates[8] + neighbourstates[9])
-    burned_neighbours = (neighbourstates[10] + neighbourstates[11] + neighbourstates[12] + neighbourstates[13])
-    
+    burning_neighbours = burning_dense_forest + burning_canyon + burning_chaparral + powerplant + incinerator
+    burned_neighbours = burned_dense_forest + burned_canyon + burned_chaparral + burned_town
     ### Town rules: Burns if at least one burning neighbour, else survives
     
     # if town and burning neighbours less than 1, survive
